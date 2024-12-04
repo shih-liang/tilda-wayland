@@ -1,7 +1,10 @@
 # Tilda-wayland
 
-Workaround for Tilda (Dropdown terminal like Guake) to work natively on Wayland. Forked from [lanoxx/tilda](https://github.com/lanoxx/tilda).
-This is a quick and dirty solution to get Tilda working on Wayland. All X11 specific code is removed, making it no longer compatible with X11/Xorg environments.
+A workaround to enable Tilda — a dropdown terminal emulator similar to Guake — to work natively on Wayland. This project is forked from [lanoxx/tilda](https://github.com/lanoxx/tilda).
+
+This is a quick and dirty solution to get Tilda working on Wayland. All X11-specific code has been removed, making it incompatible with X11/Xorg environments.
+
+In this fork, Tilda's D-Bus interface is enabled by default, allowing you to toggle the Tilda window via a D-Bus action. You can configure a global shortcut key within your desktop environment to toggle Tilda by running `tilda -T`. Use the argument `-T 0` to toggle the first instance. If additional Tilda processes are running, each process increments this value by one (e.g., `-T 1` for the second instance).
 
 # What is Tilda?
 
@@ -36,19 +39,6 @@ Starting with version 1.4 Tilda's keybindings page switches to
 a new list based layout that is easier to use.
 
 ![Keybindings](images/tilda_keybindings-16-9.png)
-
-## Supported Platforms
-Tilda works only on Xorg-based desktops. Previously that
-meant that virtually all Linux distributions and some BSD's would be supported.
-Recently however, some Linux distributions
-(such as Ubuntu 17.10 and later) have started to use Wayland as their
-default display server. Tilda can run on Wayland via the Xwayland plugin and
-the most recent version of Tilda has implemented a D-Bus interface, that
-allows to toggle the Tilda window via a D-Bus action. To enable this, users
-need to start Tilda with the `--dbus` argument, and configure a (global)
-shortcut key within desktop-environment, passing `-T 0` argument to toggle
-the first instance. If additional tilda processes are running, then each
-process increments this value by one (i.e., `-T 1` for the second instance).
 
 # Installing Tilda
 
