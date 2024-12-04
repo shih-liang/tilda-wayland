@@ -45,7 +45,6 @@
 #include "tilda-keybinding.h"
 #include "tilda-lock-files.h"
 #include "tilda_window.h"
-#include "tomboykeybinder.h"
 #include "wizard.h"
 
 #include <glib-object.h>
@@ -63,6 +62,14 @@
 
 static void setup_signal_handlers (void);
 static void show_startup_dialog (int config_init_result);
+
+static gboolean is_wayland_backend(GtkWidget *window) {
+    GdkDisplay *display = gtk_widget_get_display(window);
+    const gchar *display_name = g_type_name(G_TYPE_FROM_INSTANCE(display));
+    
+    /* GdkWaylandDisplay indicates Wayland backend */
+    return g_strcmp0(display_name, "GdkWaylandDisplay") == 0;
+}
 
 /**
  * Set values in the config from command-line parameters
@@ -309,9 +316,6 @@ int main (int argc, char *argv[])
         goto initialization_failed;
     }
 
-    /* Initialize and set up the keybinding to toggle tilda's visibility. */
-    tomboy_keybinder_init ();
-
     setup_signal_handlers ();
 
     /* If the config file doesn't exist open up the wizard */
@@ -327,8 +331,7 @@ int main (int argc, char *argv[])
 
     guint bus_identifier = 0;
 
-    if (cli_options->enable_dbus) {
-
+    if (!cli_options->disable_dbus) {
         gchar *bus_name = tilda_dbus_actions_get_bus_name (&tw);
 
         g_print ("Activating D-Bus interface on bus name: %s\n",
@@ -338,7 +341,9 @@ int main (int argc, char *argv[])
 
         bus_identifier = tilda_dbus_actions_init (&tw);
 
-        tilda_window_set_dbus_enabled (&tw, TRUE);
+        tilda_window_set_wayland (&tw, is_wayland_backend(tw.window));
+    } else {
+        g_print ("D-Bus interface disabled via command line option.\n");
     }
 
     /* Show the wizard if we need to.
@@ -348,7 +353,7 @@ int main (int argc, char *argv[])
         g_print ("Starting the wizard to configure tilda options.\n");
         wizard (&tw);
     } else {
-        if (!cli_options->enable_dbus) {
+        if (!tw.wayland) {
             gint ret = tilda_keygrabber_bind (config_getstr ("key"), &tw);
 
             if (!ret)
@@ -367,8 +372,12 @@ int main (int argc, char *argv[])
 
     pull (&tw, config_getbool ("hidden") ? PULL_UP : PULL_DOWN, FALSE);
 
-    g_print ("Tilda has started. Press %s to pull down the window.\n",
-        config_getstr ("key"));
+    g_print ("Tilda has started.\n");
+
+    if (!tw.wayland) {
+        g_print ("Press %s to pull down the window.\n", config_getstr ("key"));
+    }
+
     /* Whew! We're finally all set up and ready to run GTK ... */
     gtk_main();
 

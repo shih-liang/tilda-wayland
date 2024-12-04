@@ -21,6 +21,19 @@ static gboolean toggle_option_cb (const gchar *option_name,
                                   gpointer user_data,
                                   GError **error);
 
+static GQuark tilda_error_quark (void);
+
+G_DEFINE_QUARK(tilda-config-error-quark, tilda_error)
+
+typedef enum {
+    TILDA_CONFIG_ERROR_BAD_INPUT, // Error for bad config argument
+} TildaConfigError;
+
+static gboolean toggle_option_cb (const gchar *option_name,
+                                  const gchar *value,
+                                  gpointer user_data,
+                                  GError **error);
+
 gboolean tilda_cli_options_parse_options (tilda_cli_options *cli_options,
                                           gint argc,
                                           gchar *argv[],
@@ -51,8 +64,8 @@ gboolean tilda_cli_options_parse_options (tilda_cli_options *cli_options,
     };
 
     GOptionEntry dbus_opts[] = {
-            { "dbus", 0, 0, G_OPTION_ARG_NONE,
-              &(cli_options->enable_dbus), N_("Enable D-Bus interface for this instance"), NULL },
+            { "disable-dbus", 0, 0, G_OPTION_ARG_NONE,
+              &(cli_options->disable_dbus), N_("Disable D-Bus interface for this instance"), NULL },
             { "toggle-window", 'T', G_OPTION_FLAG_OPTIONAL_ARG, G_OPTION_ARG_CALLBACK,
               toggle_option_cb,  N_("Toggle N-th instance Window visibility and exit"), NULL
             },

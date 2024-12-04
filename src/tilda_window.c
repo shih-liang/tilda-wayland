@@ -21,6 +21,7 @@
 #include "tilda_window.h"
 #include "tilda_terminal.h"
 #include "key_grabber.h"
+#include "screen-size.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -32,7 +33,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <vte/vte.h>
-#include <X11/Xlib.h>
+//#include <X11/Xlib.h>
 #include <gdk/gdkx.h>
 
 static tilda_term* tilda_window_get_current_terminal (tilda_window *tw);
@@ -179,6 +180,7 @@ void tilda_window_set_fullscreen(tilda_window *tw)
   }
   else {
     gtk_window_unfullscreen (GTK_WINDOW (tw->window));
+    screen_size_set (GTK_WINDOW(tw->window), config_getint ("max_width"), config_getint ("max_height"));
   }
 }
 
@@ -196,14 +198,14 @@ gint toggle_fullscreen_cb (tilda_window *tw)
     return GDK_EVENT_STOP;
 }
 
-void tilda_window_set_dbus_enabled (tilda_window *tw, gboolean enabled)
+void tilda_window_set_wayland (tilda_window *tw, gboolean enabled)
 {
-    tw->dbus_enabled = enabled;
+    tw->wayland = enabled;
 }
 
-gboolean tilda_window_get_dbus_enabled (tilda_window *tw)
+gboolean tilda_window_get_wayland (tilda_window *tw)
 {
-    return tw->dbus_enabled;
+    return tw->wayland;
 }
 
 static gint toggle_transparency_cb (tilda_window *tw)
@@ -608,14 +610,6 @@ static gboolean focus_out_event_cb (GtkWidget *widget, G_GNUC_UNUSED GdkEvent *e
     *  check this flag in the pull() function that shows or hides the tilda window. This helps us to decide if
     *  we just need to focus tilda or if we should hide it.
     */
-    XEvent xevent;
-    XPeekEvent(gdk_x11_display_get_xdisplay(gdk_window_get_display(gtk_widget_get_window(tw->window))), &xevent);
-
-    if(xevent.type == KeyPress) {
-        tw->focus_loss_on_keypress = TRUE;
-    } else {
-        tw->focus_loss_on_keypress = FALSE;
-    }
 
     if (tw->auto_hide_on_focus_lost == FALSE)
         return GDK_EVENT_PROPAGATE;
@@ -909,7 +903,6 @@ gboolean tilda_window_init (const gchar *config_file, const gint instance, tilda
     tw->auto_hide_on_mouse_leave = config_getbool("auto_hide_on_mouse_leave");
     tw->auto_hide_on_focus_lost = config_getbool("auto_hide_on_focus_lost");
     tw->disable_auto_hide = FALSE;
-    tw->focus_loss_on_keypress = FALSE;
 
     PangoFontDescription *description = pango_font_description_from_string(config_getstr("font"));
     gint size = pango_font_description_get_size(description);
@@ -1055,7 +1048,7 @@ gboolean tilda_window_init (const gchar *config_file, const gint instance, tilda
                                  width,
                                  height);
 
-    gtk_window_resize (GTK_WINDOW(tw->window), width, height);
+    screen_size_set (GTK_WINDOW(tw->window), width, height);
 
     /* Create GDK resources now, to prevent crashes later on */
     gtk_widget_realize (tw->window);
@@ -1367,7 +1360,7 @@ static gboolean update_tilda_window_size (gpointer user_data)
         newHeight = configured_geometry.height;
     }
 
-    gtk_window_resize (GTK_WINDOW (tw->window),
+    screen_size_set (GTK_WINDOW (tw->window),
                        newWidth,
                        newHeight);
 

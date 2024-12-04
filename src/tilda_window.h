@@ -77,13 +77,11 @@ struct tilda_window_
 
     gboolean fullscreen;
 
-    /* If tilda was started with D-Bus support */
-    gboolean dbus_enabled;
+    /* If tilda was started within Wayland */
+    gboolean wayland;
 
     /* This field MUST be set before calling pull()! */
     enum tilda_animation_state current_state;
-
-    gboolean focus_loss_on_keypress;
 
     gint unscaled_font_size;
     gdouble current_scale_factor;
@@ -176,14 +174,14 @@ gint toggle_fullscreen_cb (tilda_window *tw);
  * @param tw An instance of a tilda_window struct.
  * @param enabled TRUE if D-Bus is enabled for this instance, false otherwise.
  */
-void tilda_window_set_dbus_enabled (tilda_window *tw, gboolean enabled);
+void tilda_window_set_wayland (tilda_window *tw, gboolean enabled);
 
 /**
  * Get the D-Bus state in the tilda window.
  * @param tw An instance of a tilda_window struct.q
  * @return Returns TRUE if D-Bus is enabled, FALSE otherwise.
  */
-gboolean tilda_window_get_dbus_enabled (tilda_window *tw);
+gboolean tilda_window_get_wayland (tilda_window *tw);
 
 /**
  * This controls where the tabs are positions (e.g. top, left, bottom or

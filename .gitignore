@@ -1,5 +1,8 @@
+*~
 *.o
+*.mo
 m4
+*.po
 po/*~
 po/*.gmo
 po/*.sed
@@ -29,6 +32,8 @@ po/en@quot.header
 po/stamp-po
 po/tilda.pot
 src/.deps/
+src/tilda-dbus\.[ch]
+src/tilda-enum-types\.[ch]
 src/Makefile
 src/Makefile.in
 src/key_converter.c
@@ -37,6 +42,7 @@ src/glade-resources.h
 src/tilda
 stamp-h1
 src/tilda.ui~
+data/man/tilda.1
 config.h
 config.h.in
 config.h.in~
@@ -49,5 +55,6 @@ INSTALL
 .cproject
 .kdev4
 .idea
+.dirstamp
 build/
 cmake-build-debug/

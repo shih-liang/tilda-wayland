@@ -114,7 +114,7 @@ gint wizard (tilda_window *tw)
     set_wizard_state_from_config (tw);
 
     wizard->keybinding = tilda_keybinding_init (wizard->builder,
-                                                tilda_window_get_dbus_enabled (tw));
+                                                tilda_window_get_wayland (tw));
 
     /* Connect all signal handlers. We do this after copying the state into
      * the wizard so that all of the handlers don't get called as we copy in
@@ -328,7 +328,7 @@ combo_monitor_selection_changed_cb (GtkWidget* widget, tilda_window *tw)
         SPIN_BUTTON_SET_RANGE ("spin_width_pixels", 0, new_max_width);
         SPIN_BUTTON_SET_VALUE ("spin_width_pixels", rectangle.width);
 
-        gtk_window_resize (GTK_WINDOW(tw->window),
+        screen_size_set (GTK_WINDOW(tw->window),
                            rectangle.width,
                            rectangle.height);
     }
@@ -340,7 +340,7 @@ combo_monitor_selection_changed_cb (GtkWidget* widget, tilda_window *tw)
         SPIN_BUTTON_SET_RANGE ("spin_height_pixels", 0, new_max_height);
         SPIN_BUTTON_SET_VALUE ("spin_height_pixels", rectangle.height);
 
-        gtk_window_resize (GTK_WINDOW(tw->window),
+        screen_size_set (GTK_WINDOW(tw->window),
                            rectangle.width,
                            rectangle.height);
     }
@@ -917,7 +917,7 @@ static void spin_height_percentage_value_changed_cb (GtkWidget *spin_height_perc
     GdkRectangle rectangle;
     config_get_configured_window_size (&rectangle);
 
-    gtk_window_resize (GTK_WINDOW(tw->window), rectangle.width, height_pixels);
+    screen_size_set (GTK_WINDOW(tw->window), rectangle.width, height_pixels);
 
     if (config_getbool ("centered_vertically"))
     {
@@ -953,7 +953,7 @@ static void spin_height_pixels_value_changed_cb (GtkWidget *spin_height_pixels,
     GdkRectangle rectangle;
     config_get_configured_window_size (&rectangle);
 
-    gtk_window_resize (GTK_WINDOW(tw->window), rectangle.width, height_pixels);
+    screen_size_set (GTK_WINDOW(tw->window), rectangle.width, height_pixels);
 
     if (config_getbool ("centered_vertically"))
     {
@@ -989,7 +989,7 @@ static void spin_width_percentage_value_changed_cb (GtkWidget *spin_width_percen
     GdkRectangle rectangle;
     config_get_configured_window_size (&rectangle);
 
-    gtk_window_resize (GTK_WINDOW(tw->window), width_pixels, rectangle.height);
+    screen_size_set (GTK_WINDOW(tw->window), width_pixels, rectangle.height);
 
     if (config_getbool ("centered_horizontally"))
     {
@@ -1024,7 +1024,7 @@ static void spin_width_pixels_value_changed_cb (GtkWidget *spin_width_pixels, ti
     GdkRectangle rectangle;
     config_get_configured_window_size (&rectangle);
 
-    gtk_window_resize (GTK_WINDOW(tw->window), width_pixels, rectangle.height);
+    screen_size_set (GTK_WINDOW(tw->window), width_pixels, rectangle.height);
 
     if (config_getbool ("centered_horizontally"))
     {
@@ -1261,7 +1261,7 @@ static void check_animated_pulldown_toggled_cb (GtkWidget *w, tilda_window *tw)
         guint width = rectangle.width;
         guint height = rectangle.height;
 
-        gtk_window_resize (GTK_WINDOW(tw->window), width, height);
+        screen_size_set (GTK_WINDOW(tw->window), width, height);
         gtk_window_move (GTK_WINDOW(tw->window), config_getint ("x_pos"), config_getint ("y_pos"));
     }
 
@@ -1272,7 +1272,7 @@ static void check_animated_pulldown_toggled_cb (GtkWidget *w, tilda_window *tw)
     {
         /* I don't know why, but width=0, height=0 doesn't work. Width=1, height=1 works
          * exactly as expected, so I'm leaving it that way. */
-        gtk_window_resize (GTK_WINDOW(tw->window), 1, 1);
+        screen_size_set (GTK_WINDOW(tw->window), 1, 1);
     }
 }
 
