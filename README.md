@@ -1,10 +1,16 @@
 # Tilda-wayland
 
-A workaround to enable Tilda — a dropdown terminal emulator similar to Guake — to work natively on Wayland. This project is forked from [lanoxx/tilda](https://github.com/lanoxx/tilda).
+A workaround to enable Tilda — a dropdown terminal emulator similar to Guake — to work natively on Wayland, forked from [lanoxx/tilda](https://github.com/lanoxx/tilda).
 
 This is a quick and dirty solution to get Tilda working on Wayland. All X11-specific code has been removed, making it incompatible with X11/Xorg environments.
 
 In this fork, Tilda's D-Bus interface is enabled by default, allowing you to toggle the Tilda window via a D-Bus action. You can configure a global shortcut key within your desktop environment to toggle Tilda by running `tilda -T`. Use the argument `-T 0` to toggle the first instance. If additional Tilda processes are running, each process increments this value by one (e.g., `-T 1` for the second instance).
+
+Example configuration for [Hyprland](https://hyprland.org/):
+```yaml
+exec-once = tilda -h # Run Tilda in background
+bind = , F1, exec tilda -T # Toggle Tilda
+```
 
 # What is Tilda?
 
