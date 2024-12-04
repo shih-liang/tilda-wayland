@@ -66,6 +66,7 @@ static void show_startup_dialog (int config_init_result);
 static gboolean is_wayland_backend(GtkWidget *window) {
     GdkDisplay *display = gtk_widget_get_display(window);
     const gchar *display_name = g_type_name(G_TYPE_FROM_INSTANCE(display));
+    printf("Display name: %s\n", display_name);
     
     /* GdkWaylandDisplay indicates Wayland backend */
     return g_strcmp0(display_name, "GdkWaylandDisplay") == 0;
@@ -289,9 +290,6 @@ int main (int argc, char *argv[])
 
     /* Set up possible overridden config options */
     setup_config_from_cli_options (cli_options);
-
-    /* Set supported backend to X11 */
-    gdk_set_allowed_backends ("x11");
 
     tilda_window tw;
     /* NULL set the tw pointers so we can get a clean exit on initialization failure */
