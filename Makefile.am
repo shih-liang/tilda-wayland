@@ -3,7 +3,7 @@
 
 SUBDIRS = po
 
-CLEANFILES = tilda.desktop tilda-dbus.desktop
+CLEANFILES = tilda.desktop
 
 MAINTAINERCLEANFILES = \
 		ABOUT-NLS \
@@ -37,7 +37,7 @@ MAINTAINERCLEANFILES = \
 		config.h.in~
 
 Applicationsdir = ${datadir}/applications
-Applications_DATA = tilda.desktop tilda-dbus.desktop
+Applications_DATA = tilda.desktop
 
 Appdatadir = ${datadir}/metainfo
 Appdata_DATA = tilda.appdata.xml

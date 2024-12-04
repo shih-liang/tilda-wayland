@@ -21,19 +21,6 @@ static gboolean toggle_option_cb (const gchar *option_name,
                                   gpointer user_data,
                                   GError **error);
 
-static GQuark tilda_error_quark (void);
-
-G_DEFINE_QUARK(tilda-config-error-quark, tilda_error)
-
-typedef enum {
-    TILDA_CONFIG_ERROR_BAD_INPUT, // Error for bad config argument
-} TildaConfigError;
-
-static gboolean toggle_option_cb (const gchar *option_name,
-                                  const gchar *value,
-                                  gpointer user_data,
-                                  GError **error);
-
 gboolean tilda_cli_options_parse_options (tilda_cli_options *cli_options,
                                           gint argc,
                                           gchar *argv[],

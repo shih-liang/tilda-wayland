@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Tilda (D-Bus)
-Comment=Terminal Emulator (with D-Bus support enabled, recommended on Wayland desktops).
-Exec=@BINDIR@/tilda --dbus
-Icon=tilda
-Terminal=false
-Type=Application
-Categories=GNOME;GTK;System;TerminalEmulator;
