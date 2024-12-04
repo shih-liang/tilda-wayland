@@ -66,7 +66,6 @@ static void show_startup_dialog (int config_init_result);
 static gboolean is_wayland_backend(GtkWidget *window) {
     GdkDisplay *display = gtk_widget_get_display(window);
     const gchar *display_name = g_type_name(G_TYPE_FROM_INSTANCE(display));
-    printf("Display name: %s\n", display_name);
     
     /* GdkWaylandDisplay indicates Wayland backend */
     return g_strcmp0(display_name, "GdkWaylandDisplay") == 0;
