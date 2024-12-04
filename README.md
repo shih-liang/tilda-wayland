@@ -1,3 +1,8 @@
+# Tilda-wayland
+
+Workaround for Tilda (Dropdown terminal like Guake) to work natively on Wayland. Forked from [lanoxx/tilda](https://github.com/lanoxx/tilda).
+This is a quick and dirty solution to get Tilda working on Wayland. All X11 specific code is removed, making it no longer compatible with X11/Xorg environments.
+
 # What is Tilda?
 
 Tilda is a terminal emulator and can be compared with other popular terminal emulators such as
